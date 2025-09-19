@@ -1,0 +1,201 @@
+
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"/><title>Krative Tech International - Student Portal</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<style>
+:root{--brand:#0a1f44;--bg:#f8fafc}
+*{box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);margin:0;color:#0f1724}
+header{background:var(--brand);color:#fff;padding:12px;text-align:center}
+main{max-width:1100px;margin:0 auto;padding:18px}
+section{display:none}
+section.active{display:block}
+.card{background:#fff;padding:16px;border-radius:10px;margin:12px 0;box-shadow:0 6px 18px rgba(2,6,23,0.06)}
+.input{width:100%;padding:12px;border-radius:8px;border:1px solid #e6edf3;margin-top:8px}
+.btn{background:var(--brand);color:#fff;padding:10px 14px;border:none;border-radius:8px;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--brand);border:1px solid rgba(10,31,68,0.08)}
+.watermark{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);opacity:0.08;pointer-events:none;max-width:60%;max-height:60%}
+.chat-box{height:220px;overflow:auto;border:1px solid #e6edf3;padding:8px;border-radius:8px;background:#fcfeff}
+.chat-msg{padding:8px;border-radius:6px;margin-bottom:8px;background:#f1f5f9}
+.muted{color:#64748b;font-size:13px}
+</style>
+</head>
+<body>
+<header><h1>Krative Tech International — Student Portal</h1></header>
+<main>
+<section id="home" class="active">
+  <div class="card" id="loginCard">
+    <div id="step1"><h2>Sign in</h2>
+      <input id="usernameInput" class="input" placeholder="Username or Email"/>
+      <div style="margin-top:10px"><button class="btn" id="continueBtn">Continue</button></div>
+      <div style="margin-top:12px" class="muted"><a href='#' id='gotoCreate'>Create account</a> · <a href='#' id='gotoForgot'>Forgot password?</a></div>
+      <p id="loginError" style="color:#ef4444"></p>
+    </div>
+    <div id="step2" style="display:none;margin-top:8px;"><h2>Enter password</h2>
+      <input id="passwordInput" class="input" type="password" placeholder="Password"/>
+      <div style="margin-top:10px;display:flex;gap:8px"><button class="btn ghost" id="backBtn">← Back</button><button class="btn" id="signInBtn">Sign in</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="create">
+  <div class="card"><h2>Create account</h2>
+    <input id="createName" class="input" placeholder="Full name"/>
+    <input id="createEmail" class="input" placeholder="Email"/>
+    <select id="createCourse" class="input"><option value=''>Select course</option><option>Visual Display and Streaming</option><option>Sound Engineering</option><option>Power Engineering</option></select>
+    <input id="createPassword" class="input" type="password" placeholder="Password"/>
+    <div style="margin-top:8px"><button class="btn" id="createBtn">Create account</button> <button class="btn ghost" id="cancelCreate">Cancel</button></div>
+    <p id="createMsg" class="muted"></p>
+  </div>
+</section>
+
+<section id="forgot">
+  <div class="card"><h2>Forgot password</h2>
+    <input id="forgotEmail" class="input" placeholder="Registered email"/>
+    <div style="margin-top:8px"><button class="btn" id="confirmEmailBtn">Confirm email</button> <button class="btn ghost" id="cancelForgot">Cancel</button></div>
+    <div id="forgotStep2" style="display:none;margin-top:8px">
+      <input id="newPassword" class="input" type="password" placeholder="New password"/>
+      <input id="confirmNewPassword" class="input" type="password" placeholder="Confirm new password"/>
+      <div style="margin-top:8px"><button class="btn" id="saveNewPassword">Save new password</button></div>
+      <p id="forgotMsg" class="muted"></p>
+    </div>
+    <p id="confirmEmailMsg" style="color:#ef4444"></p>
+  </div>
+</section>
+
+<section id="dashboard">
+  <div class="card"><h2 id="welcomeMsg">Welcome, Student</h2><p id="courseMsg" class="muted"></p><p id="courseDesc" class="muted"></p>
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" data-go="profile">Profile</button><button class="btn ghost" data-go="courses">Courses</button>
+      <button class="btn" data-go="lectures">Lectures</button><button class="btn" data-go="payment">Payment</button>
+      <button class="btn ghost" data-go="chat">Chat</button><button class="btn ghost" id="logoutBtn">Sign out</button>
+    </div></div>
+  <div class="card"><h3>Summary</h3><p><strong>Name:</strong> <span id="sumName"></span></p><p><strong>Email:</strong> <span id="sumEmail"></span></p><p><strong>Course:</strong> <span id="sumCourse"></span></p></div>
+</section>
+
+<section id="profile">
+  <div class="card"><h2>Profile</h2>
+    <input id="profileName" class="input" placeholder="Full name"/>
+    <input id="profileEmail" class="input" placeholder="Email"/>
+    <select id="profileCourse" class="input"><option value=''>Select course</option><option>Visual Display and Streaming</option><option>Sound Engineering</option><option>Power Engineering</option></select>
+    <div style="margin-top:8px"><button class="btn" id="saveProfile">Save</button> <button class="btn ghost" id="deleteAccountBtn">Delete account</button> <button class="btn ghost" data-go="dashboard">Back</button></div>
+    <p id="profileMsg" class="muted"></p>
+  </div>
+</section>
+
+<section id="courses">
+  <div class="card"><h2>Courses</h2>
+    <div><h3>Visual Display and Streaming</h3><p class="muted">Media production, live streaming, video systems.</p></div>
+    <div><h3>Sound Engineering</h3><p class="muted">Recording, mixing, live sound.</p></div>
+    <div><h3>Power Engineering</h3><p class="muted">Power systems and electrical fundamentals.</p></div>
+    <div style="margin-top:8px"><button class="btn ghost" data-go="dashboard">Back</button></div>
+  </div>
+</section>
+
+<section id="lectures">
+  <div class="card"><h2>Lectures</h2><div id="lecturesList"></div><div style="margin-top:8px"><button class="btn ghost" data-go="dashboard">Back</button></div></div>
+</section>
+
+<section id="payment">
+  <div class="card"><h2>Make Payment</h2><label class="muted">Amount (₦)</label><input id="payAmount" class="input" type="number" value="50000" style="max-width:220px"/>
+    <div style="margin-top:8px"><button class="btn" id="payNowBtn">Pay Now</button> <button class="btn ghost" data-go="dashboard">Back</button></div>
+    <p id="payMsg" class="muted"></p>
+  </div>
+</section>
+
+<section id="receipt">
+  <div class="card" style="position:relative">
+    <img src="data:image/jpeg;base64,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" class="watermark" alt="logo watermark"/>
+    <h2>Payment Receipt</h2>
+    <div><strong>Student Name:</strong> <span id="recName"></span></div>
+    <div><strong>Email:</strong> <span id="recEmail"></span></div>
+    <div><strong>Course:</strong> <span id="recCourse"></span></div><hr/>
+    <div><strong>Reference:</strong> <span id="recRef"></span></div>
+    <div><strong>Amount Paid (₦):</strong> <span id="recAmount"></span></div>
+    <div id="qrWrap" style="margin-top:8px"></div>
+    <div style="margin-top:8px"><button class="btn" id="downloadPdfBtn">Download PDF</button> <button class="btn ghost" data-go="dashboard">Back</button></div>
+  </div>
+</section>
+
+<section id="chat">
+  <div class="card"><h2>Chat (Local)</h2><div id="chatBox" class="chat-box"></div>
+    <div style="display:flex;gap:8px;margin-top:8px"><input id="chatInput" class="input" placeholder="Type a message..."/><button class="btn" id="chatSendBtn">Send</button><button class="btn ghost" id="chatClearBtn">Clear</button></div>
+    <div style="margin-top:8px"><button class="btn ghost" data-go="dashboard">Back</button></div>
+  </div>
+</section>
+
+</main>
+
+<script>
+const PAYSTACK_KEY = "pk_live_0ef54aeeab57c544bb69753ee8106ffbfa2ee36e";
+const COURSES = {
+  "Visual Display and Streaming":"Teaches media production, live streaming, video systems, camera work and broadcasting technology.",
+  "Sound Engineering":"Audio systems, recording, mixing, mastering, and live sound production.",
+  "Power Engineering":"Electricity fundamentals, power generation, transmission and distribution."
+};
+
+function showSection(id){ document.querySelectorAll('main section').forEach(s=>s.classList.remove('active')); const el = document.getElementById(id); if(el) el.classList.add('active'); window.scrollTo(0,0); }
+function goTo(id){ showSection(id); if(id==='dashboard') updateDashboard(); if(id==='lectures') renderLectures(); if(id==='receipt') regenerateReceiptFromStorage(); }
+
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click', e=>{ goTo(b.getAttribute('data-go')); }));
+
+// Two-step login
+document.getElementById('continueBtn').addEventListener('click', goToPassword);
+document.getElementById('backBtn').addEventListener('click', backToUsername);
+document.getElementById('signInBtn').addEventListener('click', submitPassword);
+document.getElementById('usernameInput').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); goToPassword(); } });
+document.getElementById('passwordInput').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); submitPassword(); } });
+
+function goToPassword(){ const u = document.getElementById('usernameInput').value.trim(); document.getElementById('loginError').textContent = ''; if(!u){ document.getElementById('loginError').textContent = 'Enter username or email.'; return; } sessionStorage.setItem('kti_user_temp', u.toLowerCase()); document.getElementById('step1').style.display='none'; document.getElementById('step2').style.display='block'; document.getElementById('passwordInput').focus(); }
+function backToUsername(){ document.getElementById('step2').style.display='none'; document.getElementById('step1').style.display='block'; document.getElementById('loginError').textContent=''; }
+function submitPassword(){ const pw = document.getElementById('passwordInput').value; const user = (sessionStorage.getItem('kti_user_temp')||'').toLowerCase(); const stored = localStorage.getItem('kti_student'); if(!stored){ document.getElementById('loginError').textContent = 'No account found. Create an account first.'; return; } const s = JSON.parse(stored); const emailMatch = s.email && s.email.toLowerCase() === user; const nameMatch = s.name && s.name.toLowerCase() === user; if((emailMatch || nameMatch) && pw === s.password){ document.getElementById('loginError').textContent=''; sessionStorage.setItem('kti_logged_in', s.email); document.getElementById('usernameInput').value=''; document.getElementById('passwordInput').value=''; document.getElementById('step2').style.display='none'; document.getElementById('step1').style.display='block'; goTo('dashboard'); updateDashboard(); } else { document.getElementById('loginError').textContent = 'Invalid username or password.'; } }
+
+// Create account
+document.getElementById('gotoCreate').addEventListener('click', e=>{ e.preventDefault(); showSection('create'); });
+document.getElementById('cancelCreate').addEventListener('click', function(){ showSection('home'); });
+document.getElementById('createBtn').addEventListener('click', function(){ const name = document.getElementById('createName').value.trim(); const email = document.getElementById('createEmail').value.trim().toLowerCase(); const course = document.getElementById('createCourse').value; const pwd = document.getElementById('createPassword').value; if(!name||!email||!course||!pwd){ document.getElementById('createMsg').textContent='Please fill all fields.'; return; } const student = { name, email, course, password: pwd }; localStorage.setItem('kti_student', JSON.stringify(student)); document.getElementById('createMsg').textContent='Account created. You can sign in.'; setTimeout(()=>{ showSection('home'); document.getElementById('usernameInput').value=email; },700); });
+
+// Forgot password
+document.getElementById('gotoForgot').addEventListener('click', e=>{ e.preventDefault(); showSection('forgot'); });
+document.getElementById('cancelForgot').addEventListener('click', ()=>{ showSection('home'); });
+document.getElementById('confirmEmailBtn').addEventListener('click', function(){ const email = (document.getElementById('forgotEmail').value||'').trim().toLowerCase(); const stored = localStorage.getItem('kti_student'); if(!stored){ document.getElementById('confirmEmailMsg').textContent='No account found.'; return; } const s = JSON.parse(stored); if(email === s.email.toLowerCase()){ document.getElementById('confirmEmailMsg').textContent=''; document.getElementById('forgotStep2').style.display='block'; } else { document.getElementById('confirmEmailMsg').textContent='No account found with this email.'; } });
+document.getElementById('saveNewPassword').addEventListener('click', function(){ const np = document.getElementById('newPassword').value; const cp = document.getElementById('confirmNewPassword').value; if(!np||!cp){ document.getElementById('forgotMsg').textContent='Enter both fields.'; return; } if(np!==cp){ document.getElementById('forgotMsg').textContent='Passwords do not match.'; return; } const stored = localStorage.getItem('kti_student'); if(!stored){ document.getElementById('forgotMsg').textContent='Account missing.'; return; } const s = JSON.parse(stored); s.password = np; localStorage.setItem('kti_student', JSON.stringify(s)); document.getElementById('forgotMsg').textContent='Password updated. Return to Sign in.'; setTimeout(()=>{ showSection('home'); },900); });
+
+// Profile save/delete
+document.getElementById('saveProfile').addEventListener('click', function(){ const stored = localStorage.getItem('kti_student'); if(!stored){ alert('Create account first.'); return; } const s = JSON.parse(stored); s.name = document.getElementById('profileName').value.trim(); s.email = document.getElementById('profileEmail').value.trim().toLowerCase(); s.course = document.getElementById('profileCourse').value; localStorage.setItem('kti_student', JSON.stringify(s)); document.getElementById('profileMsg').textContent='Profile saved.'; updateDashboard(); });
+document.getElementById('deleteAccountBtn').addEventListener('click', function(){ if(confirm('Delete local account?')){ localStorage.removeItem('kti_student'); sessionStorage.removeItem('kti_logged_in'); alert('Account removed.'); showSection('home'); } });
+
+// Update dashboard
+function updateDashboard(){ const stored = localStorage.getItem('kti_student'); if(!stored) return; const s = JSON.parse(stored); document.getElementById('welcomeMsg').textContent = 'Welcome, ' + s.name; document.getElementById('courseMsg').textContent = '('+s.course+')'; document.getElementById('courseDesc').textContent = COURSES[s.course] || ''; document.getElementById('sumName').textContent = s.name; document.getElementById('sumEmail').textContent = s.email; document.getElementById('sumCourse').textContent = s.course; document.getElementById('profileName').value = s.name; document.getElementById('profileEmail').value = s.email; document.getElementById('profileCourse').value = s.course; }
+
+// Lectures
+const lectures = [{title:"Intro to Visual Streaming",type:"video",src:"https://www.youtube.com/embed/dQw4w9WgXcQ",desc:"Overview of streaming gear."},{title:"Sound Engineering Basics",type:"notes",src:"",desc:"Fundamentals of audio."},{title:"Power Systems 101",type:"notes",src:"",desc:"Introduction to power systems."}];
+function renderLectures(){ const c = document.getElementById('lecturesList'); c.innerHTML=''; lectures.forEach((l,i)=>{ const d=document.createElement('div'); d.style.padding='12px'; d.style.borderBottom='1px solid #eef2f7'; const h=document.createElement('h4'); h.textContent=(i+1)+'. '+l.title; const p=document.createElement('p'); p.className='muted'; p.textContent=l.desc; d.appendChild(h); d.appendChild(p); if(l.type==='video' && l.src){ const frame=document.createElement('div'); frame.innerHTML=`<div style="position:relative;padding-top:56.25%"><iframe src="${l.src}" style="position:absolute;left:0;top:0;width:100%;height:100%;border:0" allowfullscreen></iframe></div>`; d.appendChild(frame); } c.appendChild(d); }); }
+
+// Payment
+document.getElementById('payNowBtn').addEventListener('click', function(){ const stored = localStorage.getItem('kti_student'); if(!stored){ alert('Create account before payment.'); return; } const s = JSON.parse(stored); const amount = Number(document.getElementById('payAmount').value) || 0; if(amount < 100){ alert('Enter valid amount (min 100)'); return; } if(!PAYSTACK_KEY || !PAYSTACK_KEY.startsWith('pk_')){ alert('Paystack key missing in the code.'); return; } var handler = PaystackPop.setup({ key: PAYSTACK_KEY, email: s.email, amount: Math.round(amount*100), currency: "NGN", ref: ''+Math.floor(Math.random()*1000000000+1), callback: function(response){ fillReceipt({ reference: response.reference, amount_kobo: Math.round(amount*100), name: s.name, email: s.email, course: s.course }); goTo('receipt'); }, onClose: function(){ alert('Payment closed'); } }); handler.openIframe(); });
+
+// Receipt
+function fillReceipt(obj){ const reference=obj.reference; const amount_kobo=obj.amount_kobo; const name=obj.name; const email=obj.email; const course=obj.course; const naira=(amount_kobo/100).toLocaleString(); document.getElementById('recName').textContent=name; document.getElementById('recEmail').textContent=email; document.getElementById('recCourse').textContent=course; document.getElementById('recRef').textContent=reference; document.getElementById('recAmount').textContent=naira; document.getElementById('qrWrap').innerHTML=''; new QRCode(document.getElementById('qrWrap'),{text:`Ref:${reference}|Name:${name}|Amt:₦${naira}`,width:120,height:120}); localStorage.setItem('kti_last_receipt', JSON.stringify(obj)); }
+function regenerateReceiptFromStorage(){ const rec=JSON.parse(localStorage.getItem('kti_last_receipt')||'null'); if(rec) fillReceipt(rec); }
+
+// PDF download
+document.getElementById('downloadPdfBtn').addEventListener('click', async function(){ const { jsPDF } = window.jspdf; const doc=new jsPDF({unit:'pt',format:'a4'}); const pageW=doc.internal.pageSize.getWidth(); const pageH=doc.internal.pageSize.getHeight(); const rec=JSON.parse(localStorage.getItem('kti_last_receipt')||'{}'); const name=rec.name||''; const email=rec.email||''; const course=rec.course||''; const ref=rec.reference||''; const amount=rec.amount_kobo? (rec.amount_kobo/100).toLocaleString():'0.00'; try{ const img="data:image/jpeg;base64,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"; doc.addImage(img,'JPEG',(pageW/2)-180,(pageH/2)-180,360,360); }catch(e){console.warn('logo add failed',e);} doc.setFontSize(16); doc.text('Krative Tech International',pageW/2,60,{align:'center'}); doc.setFontSize(12); doc.text('Payment Receipt',pageW/2,80,{align:'center'}); let y=120; const left=40; doc.setFontSize(11); doc.text(`Student Name: ${name}`,left,y); y+=18; doc.text(`Email: ${email}`,left,y); y+=18; doc.text(`Course: ${course}`,left,y); y+=18; y+=8; doc.text(`Reference: ${ref}`,left,y); y+=18; doc.text(`Amount Paid (₦): ${amount}`,left,y); y+=30; const qr=document.querySelector('#qrWrap canvas'); if(qr){ try{ const dataUrl=qr.toDataURL('image/png'); doc.addImage(dataUrl,'PNG',pageW-160,120,120,120);}catch(e){console.warn(e);} } doc.line(40,pageH-120,180,pageH-120); doc.text('Authorized Signature',40,pageH-100); doc.save('KrativeTech_Receipt_'+(ref||'receipt')+'.pdf'); });
+
+// Chat
+const CHAT_KEY='kti_chat_local';
+function renderChat(){ const box=document.getElementById('chatBox'); box.innerHTML=''; const msgs=JSON.parse(localStorage.getItem(CHAT_KEY)||'[]'); msgs.forEach(m=>{ const d=document.createElement('div'); d.className='chat-msg'; d.innerHTML=`<strong>${escapeHtml(m.user)}</strong> <div class='muted'>${m.time}</div><div style='margin-top:6px'>${escapeHtml(m.text)}</div>`; box.appendChild(d); }); box.scrollTop=box.scrollHeight; }
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+document.getElementById('chatSendBtn').addEventListener('click', function(){ const text=document.getElementById('chatInput').value.trim(); if(!text) return; const student=JSON.parse(localStorage.getItem('kti_student')||'null'); const user=(student && student.name)? student.name : (sessionStorage.getItem('kti_user_temp')||'Guest'); const msgs=JSON.parse(localStorage.getItem(CHAT_KEY)||'[]'); const now=new Date(); msgs.push({user,text,time:now.toLocaleString()}); localStorage.setItem(CHAT_KEY, JSON.stringify(msgs)); document.getElementById('chatInput').value=''; renderChat(); });
+document.getElementById('chatClearBtn').addEventListener('click', function(){ if(confirm('Clear local chat?')){ localStorage.removeItem(CHAT_KEY); renderChat(); } });
+
+// init
+document.addEventListener('DOMContentLoaded', function(){ const s=JSON.parse(localStorage.getItem('kti_student')||'null'); if(s && s.email) document.getElementById('usernameInput').value = s.email; renderLectures(); renderChat(); const logged = sessionStorage.getItem('kti_logged_in'); if(logged){ goTo('dashboard'); updateDashboard(); } });
+
+</script>
+</body>
+</html>
