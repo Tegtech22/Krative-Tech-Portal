@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Krative Tech Portal</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <img src="assets/logo.png" alt="Krative Tech logo" class="logo">
+        <div class="brand-text">
+          <h1>Krative Tech Portal</h1>
+          <p class="tag">Training · Mentorship · Media</p>
+        </div>
+      </div>
+      <nav class="main-nav">
+        <button class="nav-btn active" data-tab="dashboard">Dashboard</button>
+        <button class="nav-btn" data-tab="trainees">Trainees</button>
+        <button class="nav-btn" data-tab="trainers">Trainers</button>
+        <button class="nav-btn" data-tab="courses">Courses</button>
+        <button class="nav-btn" data-tab="uploads">Uploads</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="dashboard" class="tab active">
+      <h2>Welcome to Krative Tech</h2>
+      <p>Hands-on learning in videography, editing, sound engineering, and live streaming.</p>
+
+      <div class="stats-grid">
+        <div class="card">
+          <h3 id="stat-trainees">0</h3>
+          <p>Trainees</p>
+        </div>
+        <div class="card">
+          <h3 id="stat-trainers">0</h3>
+          <p>Trainers</p>
+        </div>
+        <div class="card">
+          <h3 id="stat-courses">4</h3>
+          <p>Courses</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section id="trainees" class="tab">
+      <div class="tab-header">
+        <h2>Trainees</h2>
+        <div class="actions">
+          <input id="search-trainee" placeholder="Search trainees..." />
+          <button id="add-trainee-btn">Add Trainee</button>
+        </div>
+      </div>
+
+      <ul id="trainee-list" class="list"></ul>
+
+      <form id="trainee-form" class="modal hidden">
+        <h3>Add Trainee</h3>
+        <label>Name <input id="trainee-name" required></label>
+        <label>Email <input id="trainee-email" type="email" required></label>
+        <label>Course <input id="trainee-course"></label>
+        <div class="form-actions">
+          <button type="submit">Save</button>
+          <button type="button" id="cancel-trainee">Cancel</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="trainers" class="tab">
+      <div class="tab-header">
+        <h2>Trainers</h2>
+        <div class="actions">
+          <input id="search-trainer" placeholder="Search trainers..." />
+          <button id="add-trainer-btn">Add Trainer</button>
+        </div>
+      </div>
+
+      <ul id="trainer-list" class="list"></ul>
+
+      <form id="trainer-form" class="modal hidden">
+        <h3>Add Trainer</h3>
+        <label>Name <input id="trainer-name" required></label>
+        <label>Email <input id="trainer-email" type="email" required></label>
+        <label>Specialty <input id="trainer-specialty"></label>
+        <div class="form-actions">
+          <button type="submit">Save</button>
+          <button type="button" id="cancel-trainer">Cancel</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="courses" class="tab">
+      <h2>Courses</h2>
+      <p>Sample course list. Extend this section to add full course-management features.</p>
+      <ul class="list">
+        <li>Videography Basics</li>
+        <li>Editing Foundations</li>
+        <li>Sound Engineering</li>
+        <li>Live Streaming Essentials</li>
+      </ul>
+    </section>
+
+    <section id="uploads" class="tab">
+      <h2>Uploads</h2>
+      <p>Upload resources for trainees and trainers.</p>
+      <div class="upload-area">
+        <input id="file-input" type="file" />
+        <button id="upload-btn">Upload</button>
+        <div id="upload-log" class="upload-log"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>&copy; Krative Tech — Empowering creatives to turn skills into income.</small>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
