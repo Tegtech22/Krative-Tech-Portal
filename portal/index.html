@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Krative Tech Portal</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <img src="assets/logo.png" alt="Krative Tech logo" class="logo" />
+      <h1 class="brand">Krative Tech Portal</h1>
+      <nav class="main-nav">
+        <button id="view-toggle" class="btn">Switch to Trainer View</button>
+        <button id="open-login" class="btn primary">Login</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h2>Practical training in videography, editing, sound & live streaming</h2>
+      <p>Hands-on learning and real-world experience to turn skills into income.</p>
+    </section>
+
+    <section class="dashboard" id="dashboard">
+      <div class="card" id="courses-card">
+        <h3>Courses</h3>
+        <ul id="courses-list">
+          <li>Videography Basics</li>
+          <li>Editing with Premiere/DaVinci</li>
+          <li>Sound Engineering Essentials</li>
+          <li>Live Streaming & Workflow</li>
+        </ul>
+      </div>
+
+      <div class="card" id="resources-card">
+        <h3>Resources</h3>
+        <p>Guides, templates, and sample projects to help you practice.</p>
+        <a href="#" id="download-syllabus" class="link">Download syllabus (PDF)</a>
+      </div>
+
+      <div class="card" id="assignments-card">
+        <h3>Assignments</h3>
+        <form id="upload-form">
+          <label for="assignment-file">Upload assignment (video/audio/zip):</label>
+          <input type="file" id="assignment-file" />
+          <button type="button" id="upload-btn" class="btn">Upload</button>
+        </form>
+        <ul id="submissions-list"></ul>
+      </div>
+    </section>
+
+    <section class="people" id="people">
+      <div class="card">
+        <h3>Trainees</h3>
+        <ul id="trainees-list">
+          <li>No trainees yet. Login as trainer to add trainees.</li>
+        </ul>
+      </div>
+
+      <div class="card trainer-only" hidden>
+        <h3>Trainer Tools</h3>
+        <button id="add-trainee" class="btn">Add sample trainee</button>
+        <button id="export-data" class="btn">Export Portal Data</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; Krative Tech — Practical creative training</p>
+    </div>
+  </footer>
+
+  <!-- Login Modal -->
+  <div id="login-modal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button id="close-login" class="modal-close">×</button>
+      <h3>Login</h3>
+      <form id="login-form">
+        <label>
+          Role
+          <select id="role-select">
+            <option value="trainee">Trainee</option>
+            <option value="trainer">Trainer</option>
+          </select>
+        </label>
+        <label>
+          Name
+          <input id="user-name" type="text" placeholder="Your name" />
+        </label>
+        <button type="submit" class="btn primary">Enter Portal</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
